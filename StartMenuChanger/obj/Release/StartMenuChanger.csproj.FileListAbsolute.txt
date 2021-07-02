@@ -1,0 +1,15 @@
+D:\repos\StartMenuChanger\bin\Release\StartMenuChanger.exe.config
+D:\repos\StartMenuChanger\bin\Release\StartMenuChanger.exe
+D:\repos\StartMenuChanger\bin\Release\StartMenuChanger.pdb
+D:\repos\StartMenuChanger\bin\Release\HZH_Controls.dll
+D:\repos\StartMenuChanger\bin\Release\MetroFramework.Design.dll
+D:\repos\StartMenuChanger\bin\Release\MetroFramework.dll
+D:\repos\StartMenuChanger\bin\Release\MetroFramework.Fonts.dll
+D:\repos\StartMenuChanger\obj\Release\StartMenuChanger.csproj.AssemblyReference.cache
+D:\repos\StartMenuChanger\obj\Release\StartMenuChanger.MainForm.resources
+D:\repos\StartMenuChanger\obj\Release\StartMenuChanger.Properties.Resources.resources
+D:\repos\StartMenuChanger\obj\Release\StartMenuChanger.csproj.GenerateResource.cache
+D:\repos\StartMenuChanger\obj\Release\StartMenuChanger.csproj.CoreCompileInputs.cache
+D:\repos\StartMenuChanger\obj\Release\StartMenuChanger.csproj.CopyComplete
+D:\repos\StartMenuChanger\obj\Release\StartMenuChanger.exe
+D:\repos\StartMenuChanger\obj\Release\StartMenuChanger.pdb
