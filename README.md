@@ -11,7 +11,7 @@ P.S.:[Command Version](https://github.com/iXeor/Win10StyleStartMenu/tree/main/Co
 
 Release版本开袋即食。
 Batch.zip为批处理版本，没有图形界面，一键运行。
-StartCharger.zip为基于C#开发的可视化版本，需要.NET Framework 4.5支撑
+StartChanger.zip为基于C#开发的可视化版本，需要.NET Framework 4.5支撑
 
 [Github项目页](https://github.com/iXeor/Win10StyleStartMenu)
 
