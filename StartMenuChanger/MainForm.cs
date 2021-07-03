@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using MetroFramework.Forms;
 using Microsoft.Win32;
@@ -10,26 +9,42 @@ namespace StartMenuChanger
 
     public partial class MainForm : MetroForm
     {
-        [DllImport("kernel32.dll", EntryPoint = "WinExec")] 
-        public static extern int WinExec(string lpCmdLine, int nCmdShow);
         public MainForm()
         {
             InitializeComponent();
         }
-        private void ExpExit()
+        private void ExpRestart()
         {
             foreach (Process exp in Process.GetProcesses())
             {
                 if(exp.ProcessName.Equals("explorer"))
                 {
                     exp.Kill();
+                    try
+                    {
+                        exp.Start();
+                    }
+                    catch (Exception)
+                    {
+                        // 忽略异常处理
+                    }
                 }
             }
         }
-        private void ExpInit()
+
+        private bool expCheck()
         {
-            WinExec("explorer.exe", 0);
+            foreach (Process exp in Process.GetProcesses())
+            {
+                if(exp.ProcessName.Equals("explorer"))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
+
         private bool IsRegeditKeyExist()
         {
             string[] subkeyNames = new string[] { };
@@ -73,8 +88,20 @@ namespace StartMenuChanger
                 DialogResult result = MessageBox.Show(@"是否现在重启资源管理器？",@"提示",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
-                   ExpExit();
-                   ExpInit();
+                    ExpRestart();
+                    if (expCheck())
+                    {
+                        MessageBox.Show(@"修改成功！",@"提示",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+                        if (result == DialogResult.OK)
+                        {
+                            Environment.Exit(0);
+                        }
+                    }
+                    else
+                    {
+                        Process.Start("explorer.exe");
+                        MessageBox.Show(@"修改成功！",@"提示",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+                    }
                 }
             }
             else if (Switch.Checked == false)
@@ -85,8 +112,16 @@ namespace StartMenuChanger
                 DialogResult result = MessageBox.Show(@"是否现在重启资源管理器？",@"提示",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
-                    ExpExit();
-                    ExpInit();
+                    ExpRestart();
+                    if (expCheck())
+                    {
+                        MessageBox.Show(@"修改成功！",@"提示",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+                    }
+                    else
+                    {
+                        Process.Start("explorer.exe");
+                        MessageBox.Show(@"修改成功！",@"提示",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+                    }
                 }
             }
         }
