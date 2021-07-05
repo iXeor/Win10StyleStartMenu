@@ -32,7 +32,7 @@ namespace StartMenuChanger
             }
         }
 
-        private bool expCheck()
+        private bool ExpPcsCheck()
         {
             foreach (Process exp in Process.GetProcesses())
             {
@@ -64,6 +64,24 @@ namespace StartMenuChanger
             return false;
         }
 
+        private void RestartNotifier()
+        {
+            DialogResult result = MessageBox.Show(@"是否现在重启资源管理器？",@"提示",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                ExpRestart();
+                if (ExpPcsCheck())
+                {
+                    MessageBox.Show(@"修改成功！",@"提示",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+                }
+                else
+                {
+                    Process.Start("explorer.exe");
+                    MessageBox.Show(@"修改成功！",@"提示",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+                }
+            }
+        }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
             Switch.Checked = false;
@@ -80,49 +98,18 @@ namespace StartMenuChanger
 
         private void Switch_MouseClick(object sender, MouseEventArgs e)
         {
+            RegistryKey key = Registry.CurrentUser;
+            RegistryKey software = key.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",true);
             if (Switch.Checked)
             {
-                RegistryKey key = Registry.CurrentUser;
-                RegistryKey software = key.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",true);
                 software.SetValue("Start_ShowClassicMode", "1", RegistryValueKind.DWord);
-                DialogResult result = MessageBox.Show(@"是否现在重启资源管理器？",@"提示",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                {
-                    ExpRestart();
-                    if (expCheck())
-                    {
-                        MessageBox.Show(@"修改成功！",@"提示",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
-                        if (result == DialogResult.OK)
-                        {
-                            Environment.Exit(0);
-                        }
-                    }
-                    else
-                    {
-                        Process.Start("explorer.exe");
-                        MessageBox.Show(@"修改成功！",@"提示",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
-                    }
-                }
+                RestartNotifier();
+                
             }
             else if (Switch.Checked == false)
             {
-                RegistryKey key = Registry.CurrentUser;
-                RegistryKey software = key.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",true);
                 software.SetValue("Start_ShowClassicMode", "0", RegistryValueKind.DWord);
-                DialogResult result = MessageBox.Show(@"是否现在重启资源管理器？",@"提示",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                {
-                    ExpRestart();
-                    if (expCheck())
-                    {
-                        MessageBox.Show(@"修改成功！",@"提示",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
-                    }
-                    else
-                    {
-                        Process.Start("explorer.exe");
-                        MessageBox.Show(@"修改成功！",@"提示",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
-                    }
-                }
+                RestartNotifier();
             }
         }
 

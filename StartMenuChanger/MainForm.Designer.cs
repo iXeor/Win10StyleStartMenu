@@ -1,16 +1,36 @@
 ﻿
 using System;
 using System.ComponentModel;
-using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Windows.Forms;
 using HZH_Controls.Controls;
-using MetroFramework;
-using MetroFramework.Forms;
 
 namespace StartMenuChanger
 {
     partial class MainForm
     {
+        [SecurityCritical]
+        [DllImport("ntdll.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        internal static extern int RtlGetVersion(ref OSVERSIONINFOEX versionInfo);
+ 
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct OSVERSIONINFOEX
+        {
+            internal int OSVersionInfoSize;
+            internal int MajorVersion;
+            internal int MinorVersion;
+            internal int BuildNumber;
+            internal int PlatformId;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+            internal string CSDVersion;
+            internal ushort ServicePackMajor;
+            internal ushort ServicePackMinor;
+            internal short SuiteMask;
+            internal byte ProductType;
+            internal byte Reserved;
+        }
+
         private IContainer components = null;
 
         protected override void Dispose(bool disposing)
@@ -24,6 +44,27 @@ namespace StartMenuChanger
 
         private void InitializeComponent()
         {
+            var osVersionInfo = new OSVERSIONINFOEX { OSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX)) };
+            if (RtlGetVersion(ref osVersionInfo) != 0)
+            {
+                DialogResult result = MessageBox.Show("无法获取当前系统版本信息");
+                if (result == DialogResult.OK)
+                {
+                    Environment.Exit(0);
+                }
+            }
+            if (osVersionInfo.BuildNumber != 22000)
+            {
+                DialogResult result = MessageBox.Show(
+                    $"当前系统版本为： {osVersionInfo.MajorVersion}.{osVersionInfo.MinorVersion}.{osVersionInfo.BuildNumber}，该程序暂仅支持10.0.22000",
+                    "提示",MessageBoxButtons.OK,MessageBoxIcon.Warning
+                );
+                if (result == DialogResult.OK)
+                {
+                    Environment.Exit(0);
+                }
+            }
+
             this.label1 = new System.Windows.Forms.Label();
             this.Switch = new HZH_Controls.Controls.UCSwitch();
             this.SuspendLayout();
